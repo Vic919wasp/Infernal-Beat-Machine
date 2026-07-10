@@ -894,7 +894,17 @@ function tick(){
   while(nextTick<ctx.currentTime+.1){
     const info=_stepMap[currentStep]||{};
     const human=parseFloat(document.getElementById('humanDyn').value)/100;
-    if(metro){
+    let hasDrumBeat = false;
+    if (precounting) {
+      for (let ti = 0; ti < TRACKS.length; ti++) {
+        if (currentStep < grid[ti].length && grid[ti][currentStep]) {
+          hasDrumBeat = true;
+          break;
+        }
+      }
+    }
+
+    if(metro && !(precounting && hasDrumBeat)){
       if(info.isDown)metroTick('accent',nextTick);
       else if(info.isBeat)metroTick('beat',nextTick);
       else if(metroSubdiv&&info.isSub)metroTick('sub',nextTick);
